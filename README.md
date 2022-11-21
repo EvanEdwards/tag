@@ -64,8 +64,6 @@ In short: this is probably not good code to learn nim from.
 
 TODOs are phrased affirmatively.  When they are true, they are moved to the Changelog.
 
-- [ ] `--clean` passes all tests.
-- [ ] If a file has a numerical suffix, a la `(1).txt`, tags are placed prior to it.
 - [ ] Templates can be specified in a config file.  %name has been reserved for this purpose
 - [ ] When -- is used, all following arguments are processed as filenames, which allows files starting with -, +, or %.
 - [ ] Templates may have programmatic values, like YYYY-dd-mm or similar.
@@ -80,7 +78,10 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 # Changelog
 
 ## 2022-11-21
-- `--clean` does a capitalization (with some articles excepted) of the filename.  Tags are left entirely alone.  Buggy.
+- Initial work toward fields.
+- `--clean` passes all tests.
+- `--clean` does a capitalization (with some articles excepted) of the filename.  Tags are left entirely alone.
+- If a file has a numerical suffix, a la `(1).txt`, tags are placed prior to it.
 
 ## 2022-11-20
 - Logo and Icon created (per my personal standards).

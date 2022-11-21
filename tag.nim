@@ -1,5 +1,5 @@
 
-import std/re, std/os, std/strformat, std/strutils, std/sequtils
+import std/re, std/os, std/strformat, std/strutils, std/sequtils, std/sugar
 
 #### Set up some basic data. 
 
@@ -43,27 +43,61 @@ Results in:
 by {app.author} {app.url}"""
 
 
-#### Meh.  Is this the best way?
+#### A global object. Meh. Is this the best way? Too new to nim to know the best practice here.
 
 type
   opts = object
     quiet: bool
+    verbose: bool
     clean: bool
+    deepclean: bool
+    force: bool
+    dryrun: bool
+    field: int
 
-var opt = opts( quiet: false, clean: false )
+var opt = opts( quiet: false, verbose: false, clean: false, deepclean: false, force: false, dryrun: false, field: 0 )
 
 
 #### The four core functions.  
 # All take a filename and return a new filename except tagExists
 
+type
+  fileName = object
+    path: string
+    field: seq[string]
+
+proc tagUnpack(name: string): fileName =
+  # Path if it exists  
+  var p: string = name.replace(re"/+[^/]*$","/")
+  if not name.contains("/"): p=""
+
+  # Make a seq of basename with a empty [0] and trim all elements
+  var s: seq[string] = ('-' & name.replace(re".*/","")).split('-').map(x => strip(x))
+  # Move ext to 0, remove from end
+  if s[^1].contains("."):
+    s[0] = s[^1].replacef(re"[^.]*\.","")
+    s[^1] = s[^1].replacef(re"\.[^.]*$","")
+
+  return fileName(path: p, field: s)
+
+proc tagPack(name: fileName): string =
+  var dot: string = ""
+  if(name.field[0].len != 0):
+    dot="."
+  return name.path & name.field[1..^1].join(" - ") & dot & name.field[0]
+
+
 proc tagExists(name: string, tag: string): bool =
   return name.match(re(fmt"\[\s*{tag}\s*\]"))
 
 proc tagClean(name: string): string =
+
+  # var nothing: fileName = tagUnpack(name)
+  # echo nothing
+
   var oname:    string = name
   var nname:    string = oname.replacef(re".*/","")
   var dirname:  string = oname.replacef(re"/[^/]*$","/")
-  var words:    tuple[token: string, isSep: bool]
 
   if(oname.contains("/")):
     oname = oname.replacef(re".*/","")
@@ -109,7 +143,11 @@ proc tagClean(name: string): string =
     for word in @["a","an","and","at","by","for","from","is","in","of","on","or","the","to","with","de","los","las"]:
       nname = nname.replaceWord(word.capitalizeAscii(), word)
       
-    nname = nname.strip().capitalizeAscii()
+    var n: fileName = nname.tagUnpack()
+    for i, s in n.field:   # It's little things in nim that I am learning.  Like why map doesn't work here.
+      n.field[i]=s.capitalizeAscii()
+    n.field[0]=n.field[0].toLower()
+    nname = n.tagPack()
 
   return dirname & "/" & nname
 
@@ -156,7 +194,7 @@ for arg in commandLineParams():
         opt.clean=true 
       of "help":
         echo app.help
-        quit(0)
+        quit(0) # Not sure why, but the manual recommends doAssert() over quit(0)
       else: echo "Unknown option: " & key
 
     else:
