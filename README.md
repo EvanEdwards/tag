@@ -1,6 +1,6 @@
 # tag - File Tagger
 
-version 0.0.1<img src="assets/identity/Logo.svg" width="128" align="right">
+version 0.0.2<img src="assets/identity/Logo.svg" width="128" align="right">
 
 This is a working but brand new program.  See **Warning** below before picking up bad habits.  On the other hand, I am using it daily as a route toward replacing a 20+ year old 788 line awk script that automatically renames files in a predictable manner.  So I have incentive to keep improving it and will have plenty of testing.
 
@@ -72,12 +72,13 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 - [ ] --nodup allows overwrite iff both files are identical.
 - [ ] --dry-run shows changes but does not actually rename files.
 - [ ] Plugin system to autotag from metadata or online services.
-- [ ] Targets delimited segments with `--field=1` and `--split=-`, like `The Guild - 01x04 - Cheesybeards.mp4` to `The Guild [2007] - 01x04 - Cheesybeards.mp4`  Defaults to `1` and `-` if `--field` is specified.
+- [ ] `--split=-` for alternate field definitions.
 - [ ] `--clean=1,3` only cleans certain fields
 
 # Changelog
 
 ## 2022-11-21
+- Targets delimited segments with `--field=1`, like `The Guild - 01x04 - Cheesybeards.mp4` to `The Guild [2007] - 01x04 - Cheesybeards.mp4`  Defaults to `1` if `--field` is specified.
 - Initial work toward fields.
 - `--clean` passes all tests.
 - `--clean` does a capitalization (with some articles excepted) of the filename.  Tags are left entirely alone.

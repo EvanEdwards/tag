@@ -23,6 +23,10 @@ function tagTest {
 
 tagTest base --quiet +mytag -foo
 tagTest clean --quiet --clean +mytag -foo
+tagTest field --quiet --field --clean +1983 -foo
+tagTest field2 --quiet --field=2 --clean +2007 -foo
+
+
 
 if [ "$1" == "--reset" ]
 then

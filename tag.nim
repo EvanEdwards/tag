@@ -68,23 +68,22 @@ type
 
 proc tagUnpack(name: string): fileName =
   # Path if it exists  
-  var p: string = name.replace(re"/+[^/]*$","/")
-  if not name.contains("/"): p=""
+  var p: string 
+  if name.contains("/"):
+    p = name.replacef(re"/+[^/]*$","/")
 
   # Make a seq of basename with a empty [0] and trim all elements
   var s: seq[string] = ('-' & name.replace(re".*/","")).split('-').map(x => strip(x))
+
   # Move ext to 0, remove from end
   if s[^1].contains("."):
-    s[0] = s[^1].replacef(re"[^.]*\.","")
-    s[^1] = s[^1].replacef(re"\.[^.]*$","")
+    s[0] = s[^1].findAll(re"(?:\(\d+\))?\.[^.]*$")[0]
+    s[^1] = s[^1].replacef(re"(?:\(\d+\))?\.?[^/.]*$","")
 
   return fileName(path: p, field: s)
 
 proc tagPack(name: fileName): string =
-  var dot: string = ""
-  if(name.field[0].len != 0):
-    dot="."
-  return name.path & name.field[1..^1].join(" - ") & dot & name.field[0]
+  return name.path & name.field[1..^1].join(" - ") & name.field[0]
 
 
 proc tagExists(name: string, tag: string): bool =
@@ -97,12 +96,11 @@ proc tagClean(name: string): string =
 
   var oname:    string = name
   var nname:    string = oname.replacef(re".*/","")
-  var dirname:  string = oname.replacef(re"/[^/]*$","/")
+  var dirname:  string = ""
 
   if(oname.contains("/")):
     oname = oname.replacef(re".*/","")
-  else:
-    dirname=""
+    dirname = name.replacef(re"/+[^/]*$","/")
 
   nname = oname.
     replacef( re"\[\s+",   "["  ).
@@ -149,7 +147,7 @@ proc tagClean(name: string): string =
     n.field[0]=n.field[0].toLower()
     nname = n.tagPack()
 
-  return dirname & "/" & nname
+  return dirname & nname
 
 proc tagRm(oname: string, tag: string): string =
   var nname: string = oname;
@@ -157,14 +155,19 @@ proc tagRm(oname: string, tag: string): string =
   return nname
 
 proc tagAdd(oname: string, tag: string): string =
-  var nname: string = oname.tagRm(tag);
   # We do it this way so we can have an option in the future to remove and readd tags at the end.
-  if not oname.tagExists(tag):
-    if oname.replace(re".*/","").contains("."):
-      nname = nname.replacef(re"((?:\(\d+\))?\.?[^/.]*$)"," [" & tag & "]$1").tagClean()
-    else:
-      nname = nname.replacef(re"$"," [" & tag & "]").tagClean()
-  return nname
+  var name: fileName = oname.tagRm(tag).tagUnpack()
+
+  # Okay, now add the tag to the field, or the last one.
+  if(opt.field>0):
+    try: 
+      name.field[opt.field] = fmt"{name.field[opt.field]} [{tag}]"
+    except: 
+      name.field[^1] = fmt"{name.field[^1]} [{tag}]"
+  else:
+    name.field[^1] = fmt"{name.field[^1]} [{tag}]"
+
+  return tagPack(name).tagClean()
 
 
 
@@ -190,8 +193,18 @@ for arg in commandLineParams():
       case key:
       of "quiet": 
         opt.quiet=true 
+      of "verbose": 
+        opt.verbose=true 
       of "clean": 
         opt.clean=true 
+      of "deepclean": 
+        opt.deepclean=true 
+      of "force": 
+        opt.force=true 
+      of "dry-run": 
+        opt.dryrun=true     
+      of "field": 
+        opt.field= (try: parseInt(val)  except: 1)
       of "help":
         echo app.help
         quit(0) # Not sure why, but the manual recommends doAssert() over quit(0)
