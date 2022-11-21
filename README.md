@@ -68,7 +68,7 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 # Changelog
 
 ## 2022-11-20
-- Logo and Icon created.
+- Logo and Icon created (per my personal standards).
 - Makefile and testing framework set up.
 - `--help` shows basic help.
 - `--quiet` silences normal output. Probably not the best method for options.
