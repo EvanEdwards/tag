@@ -18,7 +18,9 @@ Also, `make clean` does the obvious and `make test` runs a (quick and dirty) tes
 
 To add a tag, use `+tagname`.  To remove one, use `-tagname`.  By default, tags are added at the end of a file, before the extension.
 
-Like Imagemagick or `find`, the commandline is not parsed for options and then arguments, but instead each term is considered in order.  This means that tag
+Like Imagemagick or `find`, the entire commandline is not parsed for options and then executed*, but instead each term is considered in order.  This means that tag addition or removal (and options) only affect filenames given after them in the command line.
+
+Consider the following example:
 
 ```
 $ ls -1
@@ -36,6 +38,8 @@ File2 [hello][world].txt
 File3 [hello][world]
 ```
 
+\* Yes, I know the entire commandline is parsed first regardless of application.  I mean that *logically* they don't work that way, and neither does tag.
+
 
 ## Warning
 
@@ -48,7 +52,9 @@ That's partially why it is a monolithic block with some iffy
 structure.  I learned as I went.  But the code does work and 
 I have some ideas on extending it.  
 
-In short: this is not good code to learn nim from.
+The main tag.nim file literally started with the first example from the Nim Tutorial copied and pasted into it.  After an hour or so, I had a fully working application, which speaks volumes for the quality of nim, their documentation, and online community. 
+
+In short: this is probably not good code to learn nim from.
 
 
 # TODO
