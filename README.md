@@ -1,6 +1,6 @@
 # tag - File Tagger
 
-version 0.0.1<img src="assets/identity/Logo.svg" width="128" style="float: right">
+version 0.0.1<img src="assets/identity/Logo.svg" width="128" align="right">
 
 This is a working but infant little program.  For details
 use tag --help for information.  Or read the code (the help
