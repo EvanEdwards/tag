@@ -1,0 +1,7 @@
+# Ignore the compiled version
+
+tag
+
+# Ignore the testing directory
+
+test/temp/
