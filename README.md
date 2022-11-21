@@ -70,6 +70,7 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 - [ ] --nodup allows overwrite iff both files are identical.
 - [ ] --dry-run shows changes but does not actually rename files.
 - [ ] Plugin system to autotag from metadata or online services.
+- [ ] Targets delimited segments with `--field=1` and `--split=-`, like `The Guild - 01x04 - Cheesybeards.mp4` to `The Guild [2007] - 01x04 - Cheesybeards.mp4`  Defaults to `1` and `-` if `--field` is specified.
 
 # Changelog
 
