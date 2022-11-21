@@ -89,16 +89,16 @@ In short: this is probably not good code to learn nim from.
 
 TODOs are phrased affirmatively.  When they are true, they are moved to the Changelog.
 
-- [ ] Templates can be specified in a config file.  %name has been reserved for this purpose
-- [ ] When -- is used, all following arguments are processed as filenames, which allows files starting with -, +, or %.
-- [ ] Templates may have programmatic values, like YYYY-dd-mm or similar.
-- [ ] A manpage is available.
-- [ ] --force allows overwrite.
-- [ ] --nodup allows overwrite iff both files are identical.
-- [ ] --dry-run shows changes but does not actually rename files.
-- [ ] Plugin system to autotag from metadata or online services.
-- [ ] `--split=-` for alternate field definitions.
-- [ ] `--clean=1,3` only cleans certain fields
+- Templates can be specified in a config file.  %name has been reserved for this purpose
+- When -- is used, all following arguments are processed as filenames, which allows files starting with -, +, or %.
+- Templates may have programmatic values, like YYYY-dd-mm or similar.
+- A manpage is available.
+- --force allows overwrite.
+- --nodup allows overwrite iff both files are identical.
+- --dry-run shows changes but does not actually rename files.
+- Plugin system to autotag from metadata or online services.
+- `--split=-` for alternate field definitions.
+- `--clean=1,3` only cleans certain fields
 
 # Changelog
 
