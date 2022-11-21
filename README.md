@@ -2,9 +2,7 @@
 
 version 0.0.1<img src="assets/identity/Logo.svg" width="128" align="right">
 
-This is a working but infant little program.  For details
-use tag --help for information.  Or read the code (the help
-is toward the top).
+This is a working but brand new program.  See **Warning** below before picking up bad habits.  On the other hand, I am using it daily as a route toward replacing a 20+ year old 788 line awk script that automatically renames files in a predictable manner.  So I have incentive to keep improving it and will have plenty of testing.
 
 *Important: This is for tagging* `[like this]` *in filenames, not the metadata in a file.*
 
@@ -65,7 +63,7 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 - [ ] --force allows overwrite.
 - [ ] --nodup allows overwrite iff both files are identical.
 - [ ] --dry-run shows changes but does not actually rename files.
-
+- [ ] Plugin system to autotag from metadata or online services.
 
 # Changelog
 
