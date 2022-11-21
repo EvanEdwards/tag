@@ -1,10 +1,5 @@
-#[
-tag
 
-TODO - Templates from a config file
-]#
-
-import std/re, std/os, std/strformat, std/strutils
+import std/re, std/os, std/strformat, std/strutils, std/sequtils
 
 #### Set up some basic data. 
 
@@ -48,14 +43,33 @@ Results in:
 by {app.author} {app.url}"""
 
 
+#### Meh.  Is this the best way?
+
+type
+  opts = object
+    quiet: bool
+    clean: bool
+
+var opt = opts( quiet: false, clean: false )
+
+
 #### The four core functions.  
 # All take a filename and return a new filename except tagExists
 
 proc tagExists(name: string, tag: string): bool =
   return name.match(re(fmt"\[\s*{tag}\s*\]"))
 
-proc tagClean(oname: string): string =
-  var nname: string = oname;
+proc tagClean(name: string): string =
+  var oname:    string = name
+  var nname:    string = oname.replacef(re".*/","")
+  var dirname:  string = oname.replacef(re"/[^/]*$","/")
+  var words:    tuple[token: string, isSep: bool]
+
+  if(oname.contains("/")):
+    oname = oname.replacef(re".*/","")
+  else:
+    dirname=""
+
   nname = oname.
     replacef( re"\[\s+",   "["  ).
     replacef( re"\s+\]",   "]"  ).
@@ -63,8 +77,41 @@ proc tagClean(oname: string): string =
     replacef( re"\s*\[",   " [" ).
     replacef( re"\]\s+\.", "]." ).
     replacef( re"\[([^]]+)\s\s+([^]]+)\]", "[$1 $2]").
-    replacef( re"\]\s*\[", "][" )
-  return nname
+    replacef( re"\]\s*\[", "][" ).
+    strip()
+
+# Okay, a lot of this could be replaced if a replace could use \U.  Maybe it can.  But this is what I did.
+
+  if opt.clean:
+    nname = nname.
+      replacef( re"\s*-\s*",  " - " )
+    nname = nname.splitWhitespace().join(" ")
+
+    # Capitalize words, but leave everything in tags alone
+    var nextCap:  bool = true
+    var inTag:    bool = false
+    for i, c in @nname:
+      if c == '[':
+        inTag=true
+        continue
+      if c == ']':
+        inTag=false
+        nextCap=false
+        continue
+      if inTag:
+        continue
+      if nextCap and c.isAlphaNumeric:
+        nname[i] = c.toUpperAscii()
+        nextCap=false
+      if c == ' ': nextCap = true
+
+    # English (and a touch of Spanish) title-casing
+    for word in @["a","an","and","at","by","for","from","is","in","of","on","or","the","to","with","de","los","las"]:
+      nname = nname.replaceWord(word.capitalizeAscii(), word)
+      
+    nname = nname.strip().capitalizeAscii()
+
+  return dirname & "/" & nname
 
 proc tagRm(oname: string, tag: string): string =
   var nname: string = oname;
@@ -76,20 +123,11 @@ proc tagAdd(oname: string, tag: string): string =
   # We do it this way so we can have an option in the future to remove and readd tags at the end.
   if not oname.tagExists(tag):
     if oname.replace(re".*/","").contains("."):
-      nname = nname.replacef(re"(\.?[^/.]*$)"," [" & tag & "]$1").tagClean()
+      nname = nname.replacef(re"((?:\(\d+\))?\.?[^/.]*$)"," [" & tag & "]$1").tagClean()
     else:
       nname = nname.replacef(re"$"," [" & tag & "]").tagClean()
   return nname
 
-
-#### Meh.  Is this the best way?
-
-type
-  opts = object
-    quiet: bool
-    clean: bool
-
-var opt = opts( quiet: false, clean: false )
 
 
 #### Hereafter lies the main loop.

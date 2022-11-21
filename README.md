@@ -18,6 +18,8 @@ Also, `make clean` does the obvious and `make test` runs a (quick and dirty) tes
 
 To add a tag, use `+tagname`.  To remove one, use `-tagname`.  By default, tags are added at the end of a file, before the extension.
 
+`--clean` will do a basic cleanup of the rest of the filename, fixing extra spaces, capitalizing most words, etc.
+
 Like Imagemagick or `find`, the entire commandline is not parsed for options and then executed*, but instead each term is considered in order.  This means that tag addition or removal (and options) only affect filenames given after them in the command line.
 
 Consider the following example:
@@ -37,6 +39,7 @@ File1
 File2 [hello][world].txt
 File3 [hello][world]
 ```
+
 
 \* Yes, I know the entire commandline is parsed first regardless of application.  I mean that *logically* they don't work that way, and neither does tag.
 
@@ -61,6 +64,7 @@ In short: this is probably not good code to learn nim from.
 
 TODOs are phrased affirmatively.  When they are true, they are moved to the Changelog.
 
+- [ ] `--clean` passes all tests.
 - [ ] If a file has a numerical suffix, a la `(1).txt`, tags are placed prior to it.
 - [ ] Templates can be specified in a config file.  %name has been reserved for this purpose
 - [ ] When -- is used, all following arguments are processed as filenames, which allows files starting with -, +, or %.
@@ -71,8 +75,12 @@ TODOs are phrased affirmatively.  When they are true, they are moved to the Chan
 - [ ] --dry-run shows changes but does not actually rename files.
 - [ ] Plugin system to autotag from metadata or online services.
 - [ ] Targets delimited segments with `--field=1` and `--split=-`, like `The Guild - 01x04 - Cheesybeards.mp4` to `The Guild [2007] - 01x04 - Cheesybeards.mp4`  Defaults to `1` and `-` if `--field` is specified.
+- [ ] `--clean=1,3` only cleans certain fields
 
 # Changelog
+
+## 2022-11-21
+- `--clean` does a capitalization (with some articles excepted) of the filename.  Tags are left entirely alone.  Buggy.
 
 ## 2022-11-20
 - Logo and Icon created (per my personal standards).

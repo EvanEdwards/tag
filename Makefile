@@ -7,7 +7,7 @@ tag: tag.nim
 
 
 ####################################
-.PHONY: clean test
+.PHONY: clean test testreset
 
 clean:
 	-rm tag
@@ -15,3 +15,6 @@ clean:
 
 test: tag
 	@bin/test.sh
+
+testreset: tag
+	@bin/test.sh --reset
