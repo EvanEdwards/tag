@@ -1,12 +1,14 @@
 # tag - File Tagger
 
-version 0.0.1
+version 0.0.1<img src="assets/identity/Logo.svg" width="128" style="float: right">
 
 This is a working but infant little program.  For details
 use tag --help for information.  Or read the code (the help
 is toward the top).
 
 *Important: This is for tagging* `[like this]` *in filenames, not the metadata in a file.*
+
+
 
 ## Build
 
