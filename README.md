@@ -2,6 +2,31 @@
 
 version 0.0.2<img src="assets/identity/Logo.svg" width="128" align="right">
 
+```
+Usage:
+  tag [options] [+tag|-tag|filename]
+```
+
+Takes a set of tags and filenames and inserts or removes them into the filenames
+according to a common social standard, using square brackets.  This is useful
+for organizing files and inserting hints into filenames for media identification 
+by programs like Plex.
+
+```
+$ tag +OSR *.pdf   
+```
+
+Takes a directory of pdf files and tags them as being old school D&D files.
+
+```
+$ tag --field=1 +2007 -youtube The\ Guild*.mp4
+```
+
+Takes a directory full of episodes, removing the tag Youtube and adding [2007]
+to the first - delimited field (typically the name of the series).
+
+
+
 This is a working but brand new program.  See **Warning** below before picking up bad habits.  On the other hand, I am using it daily as a route toward replacing a 20+ year old 788 line awk script that automatically renames files in a predictable manner.  So I have incentive to keep improving it and will have plenty of testing.
 
 *Important: This is for tagging* `[like this]` *in filenames, not the metadata in a file.*

@@ -15,7 +15,7 @@ type
 
 var app = appDetails(name: "tag",
               description: "File Tagger",
-              version: "0.0.1", 
+              version: "0.0.2", 
               author: "Evan Edwards <evan@cheshirehall.net>",
               url: "http://github.com/EvanEdwards/tag")
 
@@ -25,6 +25,34 @@ app.help= fmt"""
 Usage:
   tag [options] [+tag|-tag|filename]
 
+Takes a set of tags and filenames and inserts or removes them into the filenames
+according to a common social standard, using square brackets.  This is useful
+for organizing files and inserting hints into filenames for media identification 
+by programs like Plex.
+
+$ tag +OSR *.pdf   
+
+    Takes a directory of pdf files and tags them as being old school D&D files.
+
+$ tag --field=1 +2007 -youtube The\ Guild*.mp4  
+
+    Takes a directory full of episodes, removing the tag Youtube and adding [2007]
+    to the first - delimited field (typically the name of the series).
+
+
+# Options
+
+  --field     Add tags to first field.
+  --field=n   Add tags to field n, or the last field if n > number of fields.
+  --clean     Do extra cleanup on the filename (spacing, capitals, etc).
+
+  --help      This help.
+  --quiet     Only display errors.
+  --verbose   Show more information when run.
+
+
+# Position Sensitive
+
 Options, tags, and filenames are positional.  So:
 
   File1 +world "File2 [hello]" -moon "File3 [hello][moon]" --help File4
@@ -33,11 +61,8 @@ Results in:
   
   "File1" "File2 [hello][world]" "File3 [hello][world]"
 
-…followed by this help.  File4 is never even considered.
+…followed by this help.  File4 is never even considered, as --help ends the run.
 
-  --help      This help.
-  --quiet     Only display errors.
-  --clean     Do extra cleanup on the filename (spacing, capitals, etc).
 
 ---
 by {app.author} {app.url}"""
