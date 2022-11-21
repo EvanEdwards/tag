@@ -30,11 +30,11 @@ according to a common social standard, using square brackets.  This is useful
 for organizing files and inserting hints into filenames for media identification 
 by programs like Plex.
 
-$ tag +OSR *.pdf   
+  $ tag +OSR *.pdf   
 
     Takes a directory of pdf files and tags them as being old school D&D files.
 
-$ tag --field=1 +2007 -youtube The\ Guild*.mp4  
+  $ tag --field=1 +2007 -youtube The\ Guild*.mp4  
 
     Takes a directory full of episodes, removing the tag Youtube and adding [2007]
     to the first - delimited field (typically the name of the series).
@@ -203,7 +203,12 @@ var tagsRm:  seq[string]
 # TODO This is where we'll do an option to forego positional tags
 #var files:  seq[string]
 
-for arg in commandLineParams():
+# Load args with commandline, or if nothing, --help
+var args: seq[string] = @["--help"]
+if(paramCount()>0):
+  args=commandLineParams()
+
+for arg in args:
   case arg[0]:
   of '+': 
 #    echo "Add " & arg[1..^1]
