@@ -98,7 +98,22 @@ proc tagUnpack(name: string): fileName =
     p = name.replacef(re"/+[^/]*$","/")
 
   # Make a seq of basename with a empty [0] and trim all elements
-  var s: seq[string] = ('-' & name.replace(re".*/","")).split('-').map(x => strip(x))
+  var s: seq[string] = @[""]
+  var inTag: bool = false;
+  var seqStart: int = 0
+  for i, c in name:
+    if(c=='/'): 
+      s = @[""]
+      seqStart=i
+    if c=='[': inTag=true
+    if c==']': inTag=false
+    if c=='-' and inTag==false: 
+      s.add(name[seqStart..i-1])
+      seqStart=i+1
+
+  s.add(name[seqStart..^1])
+
+  s=s.map(x => strip(x))
 
   # Move ext to 0, remove from end
   if s[^1].contains("."):
@@ -106,6 +121,7 @@ proc tagUnpack(name: string): fileName =
     s[^1] = s[^1].replacef(re"(?:\(\d+\))?\.?[^/.]*$","")
 
   return fileName(path: p, field: s)
+
 
 proc tagPack(name: fileName): string =
   return name.path & name.field[1..^1].join(" - ") & name.field[0]
@@ -140,8 +156,6 @@ proc tagClean(name: string): string =
 # Okay, a lot of this could be replaced if a replace could use \U.  Maybe it can.  But this is what I did.
 
   if opt.clean:
-    nname = nname.
-      replacef( re"\s*-\s*",  " - " )
     nname = nname.splitWhitespace().join(" ")
 
     # Capitalize words, but leave everything in tags alone
