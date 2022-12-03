@@ -127,8 +127,8 @@ proc tagPack(name: fileName): string =
   return name.path & name.field[1..^1].join(" - ") & name.field[0]
 
 
-proc tagExists(name: string, tag: string): bool =
-  return name.match(re(fmt"\[\s*{tag}\s*\]"))
+#proc tagExists(name: string, tag: string): bool =
+#  return name.match(re(fmt"\[\s*{tag}\s*\]"))
 
 proc tagClean(name: string): string =
 
