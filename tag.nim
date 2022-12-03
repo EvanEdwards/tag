@@ -132,9 +132,6 @@ proc tagPack(name: fileName): string =
 
 proc tagClean(name: string): string =
 
-  # var nothing: fileName = tagUnpack(name)
-  # echo nothing
-
   var oname:    string = name
   var nname:    string = oname.replacef(re".*/","")
   var dirname:  string = ""
@@ -188,10 +185,12 @@ proc tagClean(name: string): string =
 
   return dirname & nname
 
+
 proc tagRm(oname: string, tag: string): string =
   var nname: string = oname;
   nname = oname.replacef(re(fmt"\[\s*{tag}\s*\]"), "").tagClean()
   return nname
+
 
 proc tagAdd(oname: string, tag: string): string =
   # We do it this way so we can have an option in the future to remove and readd tags at the end.
@@ -225,10 +224,9 @@ if(paramCount()>0):
 for arg in args:
   case arg[0]:
   of '+': 
-#    echo "Add " & arg[1..^1]
+    if(opt.verbose): echo "Add " & arg[1..^1]
     tagsAdd.add(arg[1..^1])
   of '-': 
-#    echo "Rm  " & arg[1..^1]
     if arg[1] == '-':  # TODO Probably should break out
       var key = arg[2..^1].replacef(re"[=:].*$","")
       var val = arg[2..^1].replacef(re"^[^=:]*[=:]","")
@@ -255,6 +253,7 @@ for arg in args:
       else: echo "Unknown option: " & key
 
     else:
+      if(opt.verbose): echo "Rm  " & arg[1..^1]
       tagsRm.add(arg[1..^1])
   of '%': 
     echo "Error: Formatting incomplete."  
@@ -279,14 +278,3 @@ for arg in args:
     else:
       echo &"╔ {arg}\n╚ ERROR: Not a file"
 
-#[
-for kind, key, val in getopt()
-  case key[0]
-
-
-Y - Year
-i - iso date
-I - iso date and time
-
-
-]#
